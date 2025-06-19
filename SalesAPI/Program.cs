@@ -9,6 +9,16 @@ using Microsoft.OpenApi.Models;
 
 DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
+var frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL");
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => policy
+            .WithOrigins(frontendUrl ?? "http://localhost:5173")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+    );
+});
 
 var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
@@ -77,6 +87,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+app.UseCors("AllowFrontend");
 
 if (app.Environment.IsDevelopment())
 {
