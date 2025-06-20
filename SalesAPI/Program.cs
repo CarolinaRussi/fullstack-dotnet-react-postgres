@@ -25,7 +25,6 @@ var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new Exception("JWT_KEY não encontrada");
 var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new Exception("JWT_ISSUER não encontrada");
 var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new Exception("JWT_AUDIENCE não encontrada");
-var jwtExpire = Environment.GetEnvironmentVariable("JWT_EXPIRE_MINUTES") ?? "60";
 
 builder.Services.AddAuthentication(options =>
 {
@@ -40,7 +39,7 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtIssuer,
         ValidateAudience = true,
         ValidAudience = jwtAudience,
-        ValidateLifetime = true,
+        ValidateLifetime = false,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
         ClockSkew = TimeSpan.Zero

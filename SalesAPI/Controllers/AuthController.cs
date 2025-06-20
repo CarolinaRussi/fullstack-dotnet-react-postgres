@@ -6,6 +6,7 @@ using SalesAPI.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using SalesAPI.Constants;
 
 namespace SalesAPI.Controllers
 {
@@ -42,7 +43,6 @@ namespace SalesAPI.Controllers
             var keyString = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new Exception("JWT_KEY não encontrada");
             var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new Exception("JWT_ISSUER não encontrada");
             var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new Exception("JWT_AUDIENCE não encontrada");
-            var expireMin = Environment.GetEnvironmentVariable("JWT_EXPIRE_MINUTES") ?? "60";
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -51,14 +51,15 @@ namespace SalesAPI.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, customer.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, customer.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(CustomClaimTypes.UserType, customer.UserType)
+
             };
 
             var token = new JwtSecurityToken(
                 issuer: issuer,
                 audience: audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(double.Parse(expireMin)),
                 signingCredentials: creds
             );
 

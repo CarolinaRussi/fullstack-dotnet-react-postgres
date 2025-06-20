@@ -28,5 +28,5 @@ namespace SalesAPI.DTOs
         public string? Password { get; set; }
 
         public List<PostPutAddressDTO>? Addresses { get; set; }
-    }    
+    }
 }

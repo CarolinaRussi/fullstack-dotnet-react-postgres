@@ -80,43 +80,6 @@ namespace SalesAPI.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("me")]
-        public async Task<ActionResult<CustomerDTO>> GetCurrentCustomer()
-        {
-            var customerIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
-            if (string.IsNullOrEmpty(customerIdClaim)) return Unauthorized();
-
-            if (!int.TryParse(customerIdClaim, out var customerId)) return Unauthorized();
-
-            var customer = await _context.Customers
-                .Include(c => c.Addresses)
-                .FirstOrDefaultAsync(c => c.Id == customerId);
-
-            if (customer == null) return NotFound();
-
-            var customerDTO = new CustomerDTO
-            {
-                Id = customer.Id,
-                Document = customer.Document,
-                Name = customer.Name,
-                Email = customer.Email,
-                Telephone = customer.Telephone,
-                Addresses = customer.Addresses.Select(a => new AddressDTO
-                {
-                    Id = a.Id,
-                    Street = a.Street,
-                    Number = a.Number,
-                    City = a.City,
-                    State = a.State,
-                    ZipCode = a.ZipCode,
-                    CustomerId = a.CustomerId
-                }).ToList()
-            };
-
-            return Ok(customerDTO);
-        }
-
-        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<CustomerDTO>> CreateCustomer(PostCustomerDTO dto)
         {
