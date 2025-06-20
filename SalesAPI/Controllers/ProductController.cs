@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace SalesAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/product")]
     [Authorize]
     public class ProductController : ControllerBase
     {

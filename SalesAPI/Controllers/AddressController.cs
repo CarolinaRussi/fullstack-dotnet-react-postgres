@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace SalesAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/address")]
     [Authorize]
     public class AddressController : ControllerBase
     {

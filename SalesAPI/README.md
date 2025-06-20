@@ -53,6 +53,7 @@ DTOs foram criados para separar os dados de entrada e saída:
 ## 4. Autenticação e Autorização
 
 - Implementado login via **JWT**.
+- O token JWT inclui também a propriedade `userType` (ex: `"admin"` ou `"customer"`), usada pelo front-end para controlar acesso a páginas administrativas.
 - Endpoint de login em `/api/auth/login`.
 - Clientes são registrados com senha hasheada (`BCrypt`).
 - Rotas protegidas com `[Authorize]`:

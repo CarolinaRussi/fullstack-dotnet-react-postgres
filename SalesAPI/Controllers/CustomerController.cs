@@ -9,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 namespace SalesAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/customer")]
     [Authorize]
     public class CustomerController : ControllerBase
     {
