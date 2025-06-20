@@ -14,12 +14,10 @@ namespace SalesAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly SalesDbContext _context;
-        private readonly IConfiguration _configuration;
 
         public AuthController(SalesDbContext context, IConfiguration configuration)
         {
             _context = context;
-            _configuration = configuration;
         }
 
         [HttpPost("login")]
@@ -41,13 +39,13 @@ namespace SalesAPI.Controllers
 
         private string GenerateJwtToken(Customer customer)
         {
-            var jwtSettings = _configuration.GetSection("Jwt");
+            var keyString = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new Exception("JWT_KEY não encontrada");
+            var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new Exception("JWT_ISSUER não encontrada");
+            var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new Exception("JWT_AUDIENCE não encontrada");
+            var expireMin = Environment.GetEnvironmentVariable("JWT_EXPIRE_MINUTES") ?? "60";
 
-            var keyString = jwtSettings["Key"] ?? throw new Exception("Jwt:Key não encontrada");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var expireMin = jwtSettings["ExpireMinutes"] ?? throw new Exception("Jwt:ExpireMinutes não encontrada");
 
             var claims = new[]
             {
@@ -57,11 +55,12 @@ namespace SalesAPI.Controllers
             };
 
             var token = new JwtSecurityToken(
-                issuer: jwtSettings["Issuer"],
-                audience: jwtSettings["Audience"],
+                issuer: issuer,
+                audience: audience,
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(double.Parse(expireMin)),
-                signingCredentials: creds);
+                signingCredentials: creds
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

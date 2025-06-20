@@ -22,11 +22,10 @@ builder.Services.AddCors(options =>
 
 var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
-var jwtSection = builder.Configuration.GetSection("Jwt");
-var jwtKey = jwtSection["Key"] ?? throw new Exception("Jwt:Key não encontrada");
-var jwtIssuer = jwtSection["Issuer"] ?? throw new Exception("Jwt:Issuer não encontrada");
-var jwtAudience = jwtSection["Audience"] ?? throw new Exception("Jwt:Audience não encontrada");
-var jwtExpire = jwtSection["ExpireMinutes"] ?? throw new Exception("Jwt:ExpireMinutes não encontrada");
+var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new Exception("JWT_KEY não encontrada");
+var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new Exception("JWT_ISSUER não encontrada");
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new Exception("JWT_AUDIENCE não encontrada");
+var jwtExpire = Environment.GetEnvironmentVariable("JWT_EXPIRE_MINUTES") ?? "60";
 
 builder.Services.AddAuthentication(options =>
 {

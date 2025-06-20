@@ -10,6 +10,7 @@ namespace SalesAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CustomerController : ControllerBase
     {
         private readonly SalesDbContext _context;
@@ -49,7 +50,6 @@ namespace SalesAPI.Controllers
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerDTO>> GetCustomer(int id)
-
         {
             var customer = await _context.Customers
                 .Include(c => c.Addresses)
@@ -79,6 +79,7 @@ namespace SalesAPI.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet("me")]
         public async Task<ActionResult<CustomerDTO>> GetCurrentCustomer()
         {
@@ -121,7 +122,7 @@ namespace SalesAPI.Controllers
         {
             bool documentExists = await _context.Customers.AnyAsync(c => c.Document == dto.Document);
             if (documentExists)
-                return Conflict(new { error = "Documento já cadastrado." });
+                return Conflict(new { error = "CPF já cadastrado." });
 
             bool emailExists = await _context.Customers.AnyAsync(c => c.Email == dto.Email);
             if (emailExists)
@@ -131,10 +132,10 @@ namespace SalesAPI.Controllers
 
             var customer = new Customer
             {
-                Document     = dto.Document,
-                Name         = dto.Name,
-                Email        = dto.Email,
-                Telephone    = dto.Telephone,
+                Document = dto.Document,
+                Name = dto.Name,
+                Email = dto.Email,
+                Telephone = dto.Telephone,
                 PasswordHash = hashedPassword,
             };
 
@@ -143,10 +144,10 @@ namespace SalesAPI.Controllers
 
             var customerDTO = new CustomerDTO
             {
-                Id        = customer.Id,
-                Document  = customer.Document,
-                Name      = customer.Name,
-                Email     = customer.Email,
+                Id = customer.Id,
+                Document = customer.Document,
+                Name = customer.Name,
+                Email = customer.Email,
                 Telephone = customer.Telephone,
                 Addresses = new List<AddressDTO>()
             };

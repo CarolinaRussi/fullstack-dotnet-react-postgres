@@ -29,10 +29,17 @@ namespace SalesAPI.Data
                 .HasForeignKey(a => a.CustomerId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Sale>()
+                .HasOne(s => s.Customer)
+                .WithMany(c => c.Sales)
+                .HasForeignKey(s => s.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<SaleItem>()
                 .HasOne(si => si.Sale)
                 .WithMany(s => s.SaleItems)
-                .HasForeignKey(si => si.SaleId);
+                .HasForeignKey(si => si.SaleId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<SaleItem>()
                 .HasOne(si => si.Product)

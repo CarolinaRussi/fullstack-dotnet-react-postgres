@@ -102,6 +102,47 @@ namespace SalesAPI.Controllers
             return Ok(saleDto);
         }
 
+        [HttpGet("customer/{customerId}")]
+        public async Task<ActionResult<IEnumerable<SaleDTO>>> GetSalesByCustomer(int customerId)
+        {
+            var sales = await _context.Sales
+                .Where(s => s.CustomerId == customerId)
+                .Include(s => s.Customer)
+                .Include(s => s.SaleItems)
+                    .ThenInclude(si => si.Product)
+                .ToListAsync();
+
+            var saleDtos = sales.Select(sale => new SaleDTO
+            {
+                Id = sale.Id,
+                Customer = sale.Customer == null ? null : new CustomerDTO
+                {
+                    Id = sale.Customer.Id,
+                    Document = sale.Customer.Document,
+                    Name = sale.Customer.Name,
+                    Email = sale.Customer.Email,
+                    Telephone = sale.Customer.Telephone
+                },
+                TotalValue = sale.TotalValue,
+                SaleDate = sale.SaleDate,
+                SaleItems = sale.SaleItems.Select(saleItem => new SaleItemDTO
+                {
+                    Id = saleItem.Id,
+                    Product = new ProductDTO
+                    {
+                        Id = saleItem.Product.Id,
+                        Code = saleItem.Product.Code,
+                        Name = saleItem.Product.Name,
+                        Price = saleItem.Product.Price
+                    },
+                    Quantity = saleItem.Quantity,
+                    UnitPrice = saleItem.UnitPrice
+                }).ToList()
+            });
+
+            return Ok(saleDtos);
+        }
+
         [HttpPost]
         public async Task<ActionResult<SaleDTO>> CreateSale(PostPutSaleDTO dto)
         {
