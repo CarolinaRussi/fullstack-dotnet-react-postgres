@@ -39,6 +39,11 @@ namespace SalesAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
+            var exists = await _context.Products.AnyAsync(p => p.Code == product.Code);
+            if (exists)
+            {
+                return BadRequest(new { message = "Já existe um produto com este código." });
+            }
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
