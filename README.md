@@ -22,19 +22,7 @@ cd SalesAPI
 dotnet restore
 ```
 
-#### Crie um arquivo .env com o seguinte conteúdo:
-
-Você precisa criar um arquivo `.env` na raiz do projeto backend com as seguintes variáveis:
-
-```env
-CONNECTION_STRING=Host=<seu-host>;Database=<seu-banco>;Username=<seu-usuario>;Password=<sua-senha>;SSL Mode=Require;Trust Server Certificate=true
-FRONTEND_URL=http://localhost:5173
-
-JWT_KEY=<uma-chave-secreta-para-assinar-o-token>
-JWT_ISSUER=<nome-do-issuer-do-token, ex: SalesAPI>
-JWT_AUDIENCE=<nome-do-audience-do-token, ex: SalesAPIUsers>
-JWT_EXPIRE_MINUTES=<tempo-de-expiracao-do-token-em-minutos, ex: 60>
-```
+#### Crie um arquivo .env seguindo o exemplo do arquivo .env.example
 
 #### Rode o servidor
 
@@ -64,3 +52,10 @@ npm run dev
 ```
 
 Pronto! Com os dois servidores rodando, você já pode usar a aplicação localmente.
+
+Ao se registrar no sistema, é necessário colocar um cpf válido.
+Aqui deixo alguns cpfs válidos para vc utilizar no registro retirados do site geradorcpf.com:
+
+934.417.583-74
+219.434.462-45
+726.484.971-61
