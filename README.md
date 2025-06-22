@@ -17,6 +17,8 @@ Na tela principal é possível ver os produtos da loja (estando ou não logado),
 Ao clicar no carrinho, você será redirecionado para o seu carrinho onde pode escolher a quantidade de itens que quer comprar.
 Ao clicar em Finalizar a compra, é necessário que você tenha um endereço cadastrado. Se não tiver, uma modal se abrirá para você adicionar seu endereço.
 
+Como cliente também é possível entrar na aba do perfil para editar seus dados e endereço e viasualizar o histórico de compras.
+
 No caso de acessar como administrador, você também terá acesso a aba Produtos, onde poderá ver todos os Produtos cadastrados, edita-los, excluí-los ou ainda adicionar novos produtos.
 
 Para testar como administrador pode utilazar:
