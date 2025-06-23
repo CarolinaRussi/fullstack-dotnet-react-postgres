@@ -63,6 +63,7 @@ Pronto! Com os dois servidores rodando, você já pode usar a aplicação localm
 O projeto foi feito para simular uma loja simples que pode ser acessada por um cliente ou um administrador.
 Para acessar a loja, é necessário realizar um login.
 Caso não tenha conta, você pode se registrar.
+Por questões de desenvolvimento, na hora do registro você tem a opção de criar um usuario Cliente e Administrador
 
 Na tela principal é possível ver os produtos da loja (estando ou não logado), porém se você clicar em um produto para realizar a compra do mesmo, você precisará realizar o login.
 Ao clicar no carrinho, você será redirecionado para o seu carrinho onde pode escolher a quantidade de itens que quer comprar.

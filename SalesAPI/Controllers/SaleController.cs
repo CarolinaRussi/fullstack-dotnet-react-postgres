@@ -38,7 +38,8 @@ namespace SalesAPI.Controllers
                     Document = sale.Customer.Document,
                     Name = sale.Customer.Name,
                     Email = sale.Customer.Email,
-                    Telephone = sale.Customer.Telephone
+                    Telephone = sale.Customer.Telephone,
+                    UserType = sale.Customer.UserType,
                 },
                 TotalValue = sale.TotalValue,
                 SaleDate = sale.SaleDate,
@@ -80,7 +81,8 @@ namespace SalesAPI.Controllers
                     Document = sale.Customer.Document,
                     Name = sale.Customer.Name,
                     Email = sale.Customer.Email,
-                    Telephone = sale.Customer.Telephone
+                    Telephone = sale.Customer.Telephone,
+                    UserType = sale.Customer.UserType,
                 },
                 TotalValue = sale.TotalValue,
                 SaleDate = sale.SaleDate,
@@ -121,7 +123,8 @@ namespace SalesAPI.Controllers
                     Document = sale.Customer.Document,
                     Name = sale.Customer.Name,
                     Email = sale.Customer.Email,
-                    Telephone = sale.Customer.Telephone
+                    Telephone = sale.Customer.Telephone,
+                    UserType = sale.Customer.UserType,
                 },
                 TotalValue = sale.TotalValue,
                 SaleDate = sale.SaleDate,
@@ -193,7 +196,8 @@ namespace SalesAPI.Controllers
                     Document = customer.Document,
                     Name = customer.Name,
                     Email = customer.Email,
-                    Telephone = customer.Telephone
+                    Telephone = customer.Telephone,
+                    UserType = customer.UserType,
                 },
                 TotalValue = sale.TotalValue,
                 SaleDate = sale.SaleDate,

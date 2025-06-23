@@ -15,6 +15,7 @@ export default function Register() {
     telephone: "",
     password: "",
     confirmPassword: "",
+    userType: "",
   };
 
   const validationSchema = Yup.object({
@@ -43,13 +44,23 @@ export default function Register() {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password")], "As senhas não coincidem")
       .required("Confirmação de senha é obrigatória"),
+    userType: Yup.string()
+      .oneOf(["admin", "customer"], "Tipo de usuário inválido")
+      .required("Tipo de usuário é obrigatório"),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
     try {
-      const { document, name, email, telephone, password } = values;
+      const { document, name, email, telephone, password, userType } = values;
 
-      const dataToSend = { document, name, email, telephone, password };
+      const dataToSend = {
+        document,
+        name,
+        email,
+        telephone,
+        password,
+        userType,
+      };
 
       await api.post("/api/customer", dataToSend);
       toast.success("Registro realizado com sucesso!");
@@ -121,6 +132,24 @@ export default function Register() {
               />
               <ErrorMessage
                 name="telephone"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm">Tipo de Usuário</label>
+              <Field
+                as="select"
+                name="userType"
+                className="w-full border rounded px-3 py-2"
+              >
+                <option value="">Selecione o tipo</option>
+                <option value="admin">Administrador</option>
+                <option value="customer">Cliente</option>
+              </Field>
+              <ErrorMessage
+                name="userType"
                 component="div"
                 className="text-red-500 text-sm"
               />

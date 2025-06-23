@@ -34,6 +34,7 @@ namespace SalesAPI.Controllers
                 Name = c.Name,
                 Email = c.Email,
                 Telephone = c.Telephone,
+                UserType = c.UserType,
                 Addresses = c.Addresses.Select(a => new AddressDTO
                 {
                     Id = a.Id,
@@ -64,6 +65,7 @@ namespace SalesAPI.Controllers
                 Name = customer.Name,
                 Email = customer.Email,
                 Telephone = customer.Telephone,
+                UserType = customer.UserType,
                 Addresses = customer.Addresses.Select(a => new AddressDTO
                 {
                     Id = a.Id,
@@ -100,6 +102,7 @@ namespace SalesAPI.Controllers
                 Email = dto.Email,
                 Telephone = dto.Telephone,
                 PasswordHash = hashedPassword,
+                UserType = dto.UserType
             };
 
             _context.Customers.Add(customer);
@@ -112,6 +115,7 @@ namespace SalesAPI.Controllers
                 Name = customer.Name,
                 Email = customer.Email,
                 Telephone = customer.Telephone,
+                UserType = customer.UserType,
                 Addresses = new List<AddressDTO>()
             };
 

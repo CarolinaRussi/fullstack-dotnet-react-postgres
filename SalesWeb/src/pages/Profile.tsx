@@ -68,20 +68,35 @@ export default function Profile() {
     name: Yup.string().required("Nome é obrigatório"),
     email: Yup.string().email("Email inválido").required("Email é obrigatório"),
     telephone: Yup.string().required("Telefone é obrigatório"),
-    currentPassword: Yup.string().required("Informe a senha atual"),
 
-    newPassword: Yup.string().when("currentPassword", {
-      is: (val: string) => !!val,
-      then: (schema) =>
-        schema
-          .required("Nova senha obrigatória")
-          .min(8, "Senha deve ter no mínimo 8 caracteres")
-          .matches(/[A-Z]/, "Senha deve conter pelo menos uma letra maiúscula")
-          .matches(/[a-z]/, "Senha deve conter pelo menos uma letra minúscula")
-          .matches(/\d/, "Senha deve conter pelo menos um número")
-          .matches(/[@$!%*?&]/, "Senha deve conter pelo menos um símbolo"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
+    currentPassword: Yup.string().test(
+      "require-current-password-if-fields-changed",
+      "Informe a senha atual para alterar dados",
+      function (value) {
+        const { name, email, telephone, newPassword } = this.parent;
+
+        const dadosForamAlterados =
+          name !== user?.name ||
+          email !== user?.email ||
+          telephone !== user?.telephone ||
+          !!newPassword;
+
+        if (dadosForamAlterados) {
+          return !!value?.trim();
+        }
+
+        return true;
+      }
+    ),
+
+    newPassword: Yup.string()
+      .notRequired()
+      .trim()
+      .min(8, "Senha deve ter no mínimo 8 caracteres")
+      .matches(/[A-Z]/, "Senha deve conter pelo menos uma letra maiúscula")
+      .matches(/[a-z]/, "Senha deve conter pelo menos uma letra minúscula")
+      .matches(/\d/, "Senha deve conter pelo menos um número")
+      .matches(/[@$!%*?&]/, "Senha deve conter pelo menos um símbolo"),
 
     confirmPassword: Yup.string().when("newPassword", {
       is: (val: string) => !!val,
@@ -91,11 +106,33 @@ export default function Profile() {
           .required("Confirme a nova senha"),
       otherwise: (schema) => schema.notRequired(),
     }),
-    street: Yup.string().required("Rua é obrigatória"),
-    number: Yup.string().required("Número é obrigatório"),
-    city: Yup.string().required("Cidade é obrigatória"),
-    state: Yup.string().required("Estado é obrigatório"),
-    zipCode: Yup.string().required("CEP é obrigatório"),
+
+    street: Yup.string().test(
+      "address-required",
+      "Preencha todos os campos do endereço se preencher algum",
+      function (value) {
+        const { number, city, state, zipCode } = this.parent;
+        const anyFilled = [value, number, city, state, zipCode].some(
+          (v) => v && v.trim() !== ""
+        );
+
+        if (anyFilled) {
+          return (
+            value?.trim() &&
+            number?.trim() &&
+            city?.trim() &&
+            state?.trim() &&
+            zipCode?.trim()
+          );
+        }
+        return true;
+      }
+    ),
+
+    number: Yup.string(),
+    city: Yup.string(),
+    state: Yup.string(),
+    zipCode: Yup.string(),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
