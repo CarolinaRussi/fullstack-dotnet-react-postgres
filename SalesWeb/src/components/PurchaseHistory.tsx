@@ -37,7 +37,11 @@ export default function PurchaseHistory({
         const response = await api.get<Sale[]>(
           `/api/sale/customer/${customerId}`
         );
-        setSales(response.data);
+        const sortedSales = response.data.sort(
+          (a, b) =>
+            new Date(b.saleDate).getTime() - new Date(a.saleDate).getTime()
+        );
+        setSales(sortedSales);
       } catch {
         toast.error("Erro ao carregar histórico de compras.");
       } finally {

@@ -35,7 +35,7 @@ namespace SalesAPI.Controllers
             var token = GenerateJwtToken(customer);
             Response.Headers["Authorization"] = $"Bearer {token}";
 
-            return Ok(new { Token = token });
+            return Ok(new { Token = token, customer.Name });
         }
 
         private string GenerateJwtToken(Customer customer)

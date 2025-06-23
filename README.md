@@ -5,27 +5,6 @@ Este repositório contém um sistema fullstack dividido em duas pastas:
 - `SalesAPI` – Backend em .NET 8
 - `SalesWeb` – Frontend em React + Vite
 
-O projeto foi feito para simular uma loja simples que pode ser acessada por um cliente ou um administrador.
-Para acessar a loja, é necessário realizar um login. Caso não tenha conta, você pode se registrar.
-
-Para testar como cliente pode utilazar:
-
-Login: cliente@salesapi.com
-Senha: 1234
-
-Na tela principal é possível ver os produtos da loja (estando ou não logado), porém se você clicar em um produto para realizar a compra do mesmo, vc precisará realizar o login.
-Ao clicar no carrinho, você será redirecionado para o seu carrinho onde pode escolher a quantidade de itens que quer comprar.
-Ao clicar em Finalizar a compra, é necessário que você tenha um endereço cadastrado. Se não tiver, uma modal se abrirá para você adicionar seu endereço.
-
-Como cliente também é possível entrar na aba do perfil para editar seus dados e endereço e viasualizar o histórico de compras.
-
-No caso de acessar como administrador, você também terá acesso a aba Produtos, onde poderá ver todos os Produtos cadastrados, edita-los, excluí-los ou ainda adicionar novos produtos.
-
-Para testar como administrador pode utilazar:
-
-Login: admin@salesapi.com
-Senha: 1234
-
 ### Pré-requisitos
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download)
@@ -34,50 +13,74 @@ Senha: 1234
 
 ---
 
+### PASSO A PASSO
+
 ### Backend – **SalesAPI** (.NET)
 
-#### Instalar dependências
+#### 1. Instalar dependências
 
 ```bash
 cd SalesAPI
-dotnet restore
+dotnet restore - uma boa prática para baixar as dependencias do projeto, mas o dotnet run também faz isso nessa versão.
 ```
 
-#### Crie um arquivo .env seguindo o exemplo do arquivo .env.example
+#### 2. Crie um arquivo .env na raiz da pasta SalesAPI seguindo o exemplo do arquivo .env.example no mesmo local
 
-#### Rode o servidor
+O arquivo .env deve conter a variável CONNECTION_STRING com a connection string do banco PostgreSQL que você deseja usar — pode ser o banco do Neon, um banco local ou outro serviço PostgreSQL.
+
+Exemplo de connection string:
+Host=localhost;Port=5432;Database=SalesDb;Username=usuario;Password=senha
+
+#### 3. Rode o servidor
 
 ```bash
 dotnet run
 ```
 
+Aqui, o swagger já estará disponível através do caminho [http://localhost:5172/swagger](http://localhost:5172/swagger)
+
 ---
 
 ### Frontend – **SalesWeb** (React + Vite)
 
-#### Instalar dependências
+#### 4. Instalar dependências
 
 ```bash
 cd SalesWeb
 npm install
 ```
 
-#### Crie um arquivo .env com o seguinte conteúdo:
-
-VITE_API_URL=http://localhost:5172
-
-#### Rode o projeto
+#### 5. Rode o projeto
 
 ```bash
 npm run dev
 ```
 
-Pronto! Com os dois servidores rodando, você já pode usar a aplicação localmente.
+Pronto! Com os dois servidores rodando, você já pode usar a aplicação localmente em [http://localhost:5173](http://localhost:5173)
+
+### O Projeto
+
+O projeto foi feito para simular uma loja simples que pode ser acessada por um cliente ou um administrador.
+Para acessar a loja, é necessário realizar um login.
+Caso não tenha conta, você pode se registrar.
+
+Na tela principal é possível ver os produtos da loja (estando ou não logado), porém se você clicar em um produto para realizar a compra do mesmo, você precisará realizar o login.
+Ao clicar no carrinho, você será redirecionado para o seu carrinho onde pode escolher a quantidade de itens que quer comprar.
+Ao clicar em Finalizar a compra, é necessário que você tenha um endereço cadastrado. Se não tiver, uma modal se abrirá para você adicionar seu endereço.
+
+Como cliente também é possível entrar na aba do perfil para editar seus dados e endereço e visualizar o histórico de compras.
+
+No caso de acessar como administrador, você também terá acesso a aba Produtos, onde poderá ver todos os produtos cadastrados, edita-los, excluí-los ou ainda adicionar novos produtos.
+
+Para testar como administrador pode utilizar:
+
+Login: admin@salesapi.com
+Senha: 1234
 
 ### OBSERVACAO
 
 Ao se registrar no sistema, é necessário colocar um cpf válido.
-Aqui deixo alguns cpfs válidos para vc utilizar no registro retirados do site geradorcpf.com:
+Aqui deixo alguns cpfs válidos para você utilizar no registro retirados do site geradorcpf.com:
 
 934.417.583-74
 

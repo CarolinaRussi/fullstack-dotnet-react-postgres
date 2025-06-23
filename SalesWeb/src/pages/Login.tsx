@@ -29,7 +29,7 @@ export default function Login() {
   const handleSubmit = async (values: typeof initialValues) => {
     try {
       const response = await api.post("/api/auth/login", values);
-      const { token } = response.data;
+      const { token, name } = response.data;
 
       const decoded = jwtDecode<JwtPayload>(token);
       const userId = decoded.sub;
@@ -37,7 +37,7 @@ export default function Login() {
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
 
-      login(token);
+      login(token, name);
       toast.success("Login realizado com sucesso!");
       navigate("/");
     } catch (error) {

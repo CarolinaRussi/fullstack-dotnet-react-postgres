@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { api } from "../services/api";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useAuth } from "../contexts/AuthContext";
-import { ShoppingCart } from "lucide-react";
+import { FaCartPlus } from "react-icons/fa";
+import { toast } from "react-toastify";
+
 interface Product {
   id: number;
   code: string;
@@ -13,26 +14,55 @@ interface Product {
   size?: string;
 }
 
+interface CartItem {
+  productId: number;
+  name: string;
+  price: number;
+  quantity: number;
+  imageUrl?: string;
+  size?: string;
+}
+
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
-  const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     api.get("/api/product").then((res) => setProducts(res.data));
   }, []);
 
-  const handleClickProduct = (id: number) => {
-    if (isAuthenticated) {
-      navigate(`/cart/${id}`);
-    } else {
+  const handleClickProduct = (product: Product) => {
+    if (!isAuthenticated) {
       Swal.fire({
         icon: "info",
         title: "Atenção",
         text: "Você precisa se registrar para realizar a compra.",
         confirmButtonColor: "#0d9488",
       });
+      return;
     }
+
+    const storedCart = localStorage.getItem("cart");
+    const cart: CartItem[] = storedCart ? JSON.parse(storedCart) : [];
+
+    const existingItem = cart.find((item) => item.productId === product.id);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        imageUrl: product.imageUrl,
+        size: product.size,
+      });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    window.dispatchEvent(new Event("storage"));
+    toast.success("Produto adicionado ao carrinho!");
   };
 
   return (
@@ -43,10 +73,10 @@ export default function Home() {
           className="relative bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
         >
           <button
-            onClick={() => handleClickProduct(product.id)}
+            onClick={() => handleClickProduct(product)}
             className="absolute top-2 right-2 bg-teal-600 text-white p-2 rounded-full hover:bg-teal-700 transition cursor-pointer"
           >
-            <ShoppingCart size={20} />
+            <FaCartPlus size={20} />
           </button>
 
           {product.imageUrl && (

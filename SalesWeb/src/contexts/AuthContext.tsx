@@ -3,10 +3,11 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string) => void;
+  login: (token: string, name: string) => void;
   logout: () => void;
   userType: string;
-  loading: boolean; // adiciona loading
+  loading: boolean;
+  userName: string | null;
 }
 
 interface JwtPayloadCustom {
@@ -23,10 +24,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userType, setUserType] = useState("customer");
-  const [loading, setLoading] = useState(true); // estado loading
+  const [userName, setUserName] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const storedName = localStorage.getItem("userName");
 
     if (token) {
       try {
@@ -41,11 +44,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUserType("customer");
       setIsAuthenticated(false);
     }
-    setLoading(false); // terminou de checar
+
+    setUserName(storedName ?? null);
+    setLoading(false);
   }, []);
 
-  const login = (token: string) => {
+  const login = (token: string, name: string) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("userName", name);
+    setUserName(name);
+
     try {
       const decoded = jwtDecode<JwtPayloadCustom>(token);
       setUserType(decoded.userType ?? "customer");
@@ -57,13 +65,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userName");
     setIsAuthenticated(false);
     setUserType("customer");
+    setUserName(null);
   };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, login, logout, userType, loading }}
+      value={{ isAuthenticated, login, logout, userType, loading, userName }}
     >
       {children}
     </AuthContext.Provider>
