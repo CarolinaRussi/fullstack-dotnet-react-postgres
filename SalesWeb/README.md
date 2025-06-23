@@ -25,7 +25,7 @@ Aplicação web em **React 18** com **TypeScript**, que consome a API SalesAPI p
 - **src/**
   - **components/** – Componentes reutilizáveis (ex: `Header`, `ModalProduct`)
   - **contexts/** – Contextos React, como `AuthContext` para autenticação
-  - **pages/** – Páginas principais da aplicação (`Login`, `Register`, `Home`, `Cart`, `Profile`, `Products`)
+  - **pages/** – Páginas principais da aplicação (`Login`, `Register`, `Home`, `Cart`, `Profile`, `Products`, `Customers`)
   - **services/** – Configuração do Axios para comunicação com a API
   - **routes/** – Rotas protegidas (`AdminRoute`)
   - **App.tsx** – Define rotas principais
@@ -61,7 +61,14 @@ Aplicação web em **React 18** com **TypeScript**, que consome a API SalesAPI p
 - Feedback com **Toastify** e bloqueio de campos inválidos
 - Exclusão com confirmação via **SweetAlert2**
 
-### 2.4 Home e Experiência do Cliente
+### 2.3 Listagem e Gerenciamento de Clientes (Admin)
+
+- Página **Lista de Clientes** acessível apenas por administradores
+- Clientes listados com nome, cpf, email.
+- Feedback com **Toastify** e bloqueio de campos inválidos
+- Exclusão com confirmação via **SweetAlert2**
+
+### 2.5 Home e Experiência do Cliente
 
 - Produtos exibidos em **grid responsivo**
 - Visual limpo e acessível
@@ -69,7 +76,7 @@ Aplicação web em **React 18** com **TypeScript**, que consome a API SalesAPI p
 - Ao tentar comprar sem estar logado, alerta via **SweetAlert2**
 - Redirecionamento mantido na página atual para visitantes
 
-### 2.5 Carrinho
+### 2.6 Carrinho
 
 - Página de **carrinho** acessada por produto
 - Quantidade ajustável e total exibido
@@ -77,21 +84,12 @@ Aplicação web em **React 18** com **TypeScript**, que consome a API SalesAPI p
 - Se o usuário não tiver endereço cadastrado, uma modal com formulário de endereço é exibida antes de concluir a compra
 - Formulário reaproveita o componente AddressForm, com envio via Formik
 - Validações de campos e feedbacks de sucesso/erro com Toastify
+- Ao acessar como administrador, você pode adicionar o cliente à venda
 
-### 2.6 Perfil do Usuário
+### 2.7 Perfil do Usuário
 
 - Tela com formulário de **dados pessoais**
 - Campo **CPF** visível, mas bloqueado para edição
 - Campos de endereço incluídos
 - Histórico de compras exibido ao lado do formulário (WIP)
 
----
-
-## 3. Experiência do Usuário
-
-- Design responsivo com **Tailwind**
-- Navegação fluida com **React Router**
-- Layout adaptável ao estado de login
-- Modais com escurecimento de fundo e rolagem bloqueada
-- Validações inline nos formulários
-- Mensagens de erro detalhadas (ex: código de produto duplicado)
