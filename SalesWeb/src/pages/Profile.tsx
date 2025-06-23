@@ -1,10 +1,11 @@
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { toast } from "react-toastify";
 import { api } from "../services/api";
 import AddressForm from "../components/AddressForm";
 import PurchaseHistory from "../components/PurchaseHistory";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 
 interface Address {
   id?: number;
@@ -53,7 +54,9 @@ export default function Profile() {
     name: user.name,
     email: user.email,
     telephone: user.telephone,
-    password: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
     street: user.addresses[0]?.street || "",
     number: user.addresses[0]?.number || "",
     city: user.addresses[0]?.city || "",
@@ -65,7 +68,29 @@ export default function Profile() {
     name: Yup.string().required("Nome é obrigatório"),
     email: Yup.string().email("Email inválido").required("Email é obrigatório"),
     telephone: Yup.string().required("Telefone é obrigatório"),
-    password: Yup.string(),
+    currentPassword: Yup.string().required("Informe a senha atual"),
+
+    newPassword: Yup.string().when("currentPassword", {
+      is: (val: string) => !!val,
+      then: (schema) =>
+        schema
+          .required("Nova senha obrigatória")
+          .min(8, "Senha deve ter no mínimo 8 caracteres")
+          .matches(/[A-Z]/, "Senha deve conter pelo menos uma letra maiúscula")
+          .matches(/[a-z]/, "Senha deve conter pelo menos uma letra minúscula")
+          .matches(/\d/, "Senha deve conter pelo menos um número")
+          .matches(/[@$!%*?&]/, "Senha deve conter pelo menos um símbolo"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+
+    confirmPassword: Yup.string().when("newPassword", {
+      is: (val: string) => !!val,
+      then: (schema) =>
+        schema
+          .oneOf([Yup.ref("newPassword")], "As senhas não coincidem")
+          .required("Confirme a nova senha"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
     street: Yup.string().required("Rua é obrigatória"),
     number: Yup.string().required("Número é obrigatório"),
     city: Yup.string().required("Cidade é obrigatória"),
@@ -79,7 +104,8 @@ export default function Profile() {
         name: values.name,
         email: values.email,
         telephone: values.telephone,
-        password: values.password,
+        currentPassword: values.currentPassword || null,
+        newPassword: values.newPassword || null,
       });
 
       if (user.addresses[0]) {
@@ -103,8 +129,13 @@ export default function Profile() {
       }
 
       toast.success("Perfil atualizado com sucesso.");
-    } catch {
-      toast.error("Erro ao atualizar o perfil.");
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        toast.error("Senha atual incorreta.");
+      } else {
+        toast.error("Erro ao atualizar o perfil.");
+      }
     }
   };
 
@@ -164,14 +195,42 @@ export default function Profile() {
             </div>
 
             <div>
-              <label className="block text-sm">Nova senha</label>
+              <label className="block text-sm">Senha atual</label>
               <Field
-                name="password"
+                name="currentPassword"
                 type="password"
                 className="w-full border rounded px-3 py-2"
               />
               <ErrorMessage
-                name="password"
+                name="currentPassword"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm">Nova senha</label>
+              <Field
+                name="newPassword"
+                type="password"
+                className="w-full border rounded px-3 py-2"
+              />
+              <ErrorMessage
+                name="newPassword"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm">Confirmar nova senha</label>
+              <Field
+                name="confirmPassword"
+                type="password"
+                className="w-full border rounded px-3 py-2"
+              />
+              <ErrorMessage
+                name="confirmPassword"
                 component="div"
                 className="text-red-500 text-sm"
               />
