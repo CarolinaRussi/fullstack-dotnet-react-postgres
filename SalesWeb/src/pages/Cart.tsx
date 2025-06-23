@@ -18,7 +18,22 @@ export default function Cart() {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [hasAddress, setHasAddress] = useState(false);
   const userId = localStorage.getItem("userId");
+  const userType = localStorage.getItem("userName");
+  const [customers, setCustomers] = useState<{ id: number; name: string }[]>([]);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
+
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(userType)
+  if (userType === "Admin") {
+    api.get("/api/customer")
+      .then((res) => setCustomers(res.data))
+      .catch(() => toast.error("Erro ao carregar clientes"));
+  }
+}, []);
+
 
   useEffect(() => {
     if (userId) {
@@ -65,24 +80,29 @@ export default function Cart() {
   };
 
   const handleFinishPurchase = async () => {
-    if (!hasAddress) {
+    if (!hasAddress && userType !== "Admin") {
       setShowAddressModal(true);
       return;
     }
-    if (!userId) {
-      toast.error("Você precisa estar logado.");
+
+    const finalCustomerId =
+      userType === "Admin" ? selectedCustomerId : Number(userId);
+
+    if (!finalCustomerId) {
+      toast.error("Selecione um cliente.");
       return;
     }
 
     try {
       await api.post("/api/sale", {
-        customerId: Number(userId),
+        customerId: finalCustomerId,
         saleItems: cartItems.map((item) => ({
           productId: item.productId,
           quantity: item.quantity,
           unitPrice: item.price,
         })),
       });
+
       localStorage.removeItem("cart");
       window.dispatchEvent(new Event("storage"));
       navigate("/");
@@ -105,6 +125,26 @@ export default function Cart() {
         <h2 className="text-2xl font-bold mb-6 text-teal-700 text-center">
           Carrinho
         </h2>
+
+        {userType === "Admin" && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Selecione o cliente:
+            </label>
+            <select
+              value={selectedCustomerId ?? ""}
+              onChange={(e) => setSelectedCustomerId(Number(e.target.value))}
+              className="w-full border rounded px-3 py-2"
+            >
+              <option value="">Selecione um cliente</option>
+              {customers.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="flex flex-col gap-4">
           {cartItems.map((item) => (

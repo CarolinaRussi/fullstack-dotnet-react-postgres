@@ -8,6 +8,7 @@ import Cart from "../pages/Cart";
 import AdminRoute from "./AdminRoute";
 import ProductList from "../pages/Products";
 import PublicRoute from "./PublicRoute";
+import CustomerList from "../pages/Customer";
 
 export default function AppRoutes() {
   return (
@@ -39,6 +40,14 @@ export default function AppRoutes() {
           element={
             <AdminRoute>
               <ProductList />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/customers"
+          element={
+            <AdminRoute>
+              <CustomerList />
             </AdminRoute>
           }
         />

@@ -112,10 +112,16 @@ export default function Header() {
             </div>
 
             {userType === "admin" && (
-              <Link to="/products" className="hover:underline">
-                Produtos
-              </Link>
+              <>
+                <Link to="/products" className="hover:underline">
+                  Produtos
+                </Link>
+                <Link to="/customers" className="hover:underline">
+                  Clientes
+                </Link>
+              </>
             )}
+
           </>
         )}
         {isAuthenticated && (

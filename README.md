@@ -71,20 +71,17 @@ Ao clicar em Finalizar a compra, é necessário que você tenha um endereço cad
 
 Como cliente também é possível entrar na aba do perfil para editar seus dados e endereço e visualizar o histórico de compras.
 
-No caso de acessar como administrador, você também terá acesso a aba Produtos, onde poderá ver todos os produtos cadastrados, edita-los, excluí-los ou ainda adicionar novos produtos.
-
-Para testar como administrador pode utilizar:
-
-Login: admin@salesapi.com
-Senha: 1234
+No caso de acessar como administrador, você também terá acesso as abas Produtos e Clientes, onde poderá ver todos os produtos cadastrados, edita-los, excluí-los ou ainda adicionar novos produtos.
+Ja nos Clientes, você poderá visualizar todos os clientes registrados e excluí-los (até mesmo a sua própria conta, mas não recomendo até que upemos a versão rsrs).
+Além disso ao fazer compra como administrador, você pode selecionar o cliente daquela compra.
 
 ### OBSERVACAO
 
-Ao se registrar no sistema, é necessário colocar um cpf válido.
+Ao se registrar no sistema, é necessário colocar um cpf válido (sem pontos ou hífen - a mascara no input deve vir em uma atualizacao do sistema em breve).
 Aqui deixo alguns cpfs válidos para você utilizar no registro retirados do site geradorcpf.com:
 
-934.417.583-74
+93441758374
 
-219.434.462-45
+21943446245
 
-726.484.971-61
+72648497161
